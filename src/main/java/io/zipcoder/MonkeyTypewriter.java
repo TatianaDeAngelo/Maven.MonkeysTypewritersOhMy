@@ -1,9 +1,11 @@
 package io.zipcoder;
 
+import java.util.ArrayList;
+
 public class MonkeyTypewriter {
     public static void main(String[] args) {
         String introduction = "It was the best of times,\n" +
-                "it was the blurst of times,\n" +
+                "it was the worst of times,\n" +  //blurst?
                 "it was the age of wisdom,\n" +
                 "it was the age of foolishness,\n" +
                 "it was the epoch of belief,\n" +
@@ -21,9 +23,33 @@ public class MonkeyTypewriter {
                 "evil, in the superlative degree of comparison only.";
 
         // Do all of the Monkey / Thread building here
-        // For each Copier(one safe and one unsafe), create and start 5 monkeys copying the introduction to
+        // For each Copier(one safe and one unsafe),
+        // create and start 5 monkeys copying the introduction to
         // A Tale Of Two Cities.
 
+
+/**
+ * similar to the threadbare lab,
+ * 1 the way the code was written each monkey is just getting the next word
+ * so it wouldn't give the entire into
+ * 2 the unsafe and safe cannot be run "concurrently"?
+ */
+
+//        UnsafeCopier unsafeCopy = new UnsafeCopier(introduction);
+//        for (int i = 0; i < 5; i++) {
+//            monkeyList.add(new Thread(unsafeCopy));
+//        }
+//            for (Thread keyWord : monkeyList) {
+//            keyWord.start();
+//            }
+        ArrayList<Thread> monkeyList = new ArrayList<Thread>();
+        SafeCopier safeCopy = new SafeCopier(introduction);
+        for (int j = 0; j < 5; j++) {
+            monkeyList.add(new Thread(safeCopy));
+        }
+        for (Thread keyWord : monkeyList) {
+            keyWord.start();
+        }
 
         // This wait is here because main is still a thread and we want the main method to print the finished copies
         // after enough time has passed.
@@ -34,5 +60,7 @@ public class MonkeyTypewriter {
         }
 
         // Print out the copied versions here.
+        //System.out.println(unsafeCopy.copied);
+        System.out.println(safeCopy.copied);
     }
 }
